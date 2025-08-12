@@ -1,73 +1,71 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f8ff;
-    margin: 0;
-    padding: 20px;
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const materias = document.querySelectorAll(".materia");
 
-h1 {
-    text-align: center;
-    color: #004d66;
-}
+  // Carga el estado guardado o inicializa vacío
+  let estado = JSON.parse(localStorage.getItem("estadoMaterias")) || {};
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
-    max-width: 1200px;
-    margin: auto;
-}
+  // Inicializa materias
+  materias.forEach(materia => {
+    const id = materia.dataset.id;
 
-.materia {
-    background-color: #b3e0ff;
-    border: 2px solid #66b3ff;
-    border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-}
+    // Si no hay estado guardado para esta materia, inicializa como false (no aprobada)
+    if (estado[id] === undefined) {
+      estado[id] = false;
+    }
 
-.materia:hover {
-    background-color: #99d6ff;
-    transform: scale(1.05);
-}
+    // Aplica clases según estado guardado
+    materia.classList.toggle("aprobada", estado[id]);
+  });
 
-.materia.aprobada {
-    background-color: #b3ffb3;
-    border-color: #66ff66;
-    color: #006600;
-}
+  // Función que verifica si se cumplen los requisitos para desbloquear una materia
+  function requisitosCumplidos(materia) {
+    const req = materia.dataset.requisitos;
+    if (!req) return true;
 
-.materia.bloqueada {
-    background-color: #e6e6e6;
-    color: #999999;
-    cursor: not-allowed;
-}
+    const requisitos = req.split(",").map(r => r.trim());
+    return requisitos.every(rid => estado[rid]);
+  }
 
-/* Tooltip */
-.materia::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 110%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #004d66;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.9em;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    z-index: 10;
-}
+  // Actualiza el bloqueo/desbloqueo de materias según requisitos y estado
+  function actualizarBloqueos() {
+    materias.forEach(materia => {
+      if (requisitosCumplidos(materia)) {
+        materia.classList.remove("bloqueada");
+      } else {
+        if (!estado[materia.dataset.id]) {
+          materia.classList.add("bloqueada");
+          materia.classList.remove("aprobada");
+          estado[materia.dataset.id] = false;
+        }
+      }
+    });
+  }
 
-.materia:hover::after {
-    opacity: 1;
-}
+  actualizarBloqueos();
 
+  // Guarda el estado actual en localStorage
+  function guardarEstado() {
+    localStorage.setItem("estadoMaterias", JSON.stringify(estado));
+  }
+
+  // Evento click para aprobar o desaprobar materia
+  materias.forEach(materia => {
+    materia.addEventListener("click", () => {
+      const id = materia.dataset.id;
+
+      // Si está bloqueada y no aprobada, no hacer nada
+      if (materia.classList.contains("bloqueada") && !estado[id]) return;
+
+      // Toggle estado aprobado
+      estado[id] = !estado[id];
+      materia.classList.toggle("aprobada", estado[id]);
+
+      // Si desapruebas, actualizar bloqueos ya que puede afectar otras materias
+      if (!estado[id]) {
+        actualizarBloqueos();
+      }
+
+      guardarEstado();
+    });
+  });
+});
