@@ -1,59 +1,67 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f8ff;
-  margin: 0;
-  padding: 20px;
-  color: #333;
-}
+document.addEventListener("DOMContentLoaded", () => {
+    const materias = document.querySelectorAll(".materia");
+    const tooltip = document.getElementById("tooltip");
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
+    // Cargar estado desde localStorage
+    let estado = JSON.parse(localStorage.getItem("estadoMaterias")) || {};
 
-.malla {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-}
+    // Aplicar estado inicial
+    materias.forEach(materia => {
+        const id = materia.dataset.id;
+        if (estado[id] === "aprobada") {
+            materia.classList.add("aprobada");
+            materia.classList.remove("bloqueada");
+        }
+    });
 
-.año {
-  background: #e6f2ff;
-  border: 2px solid #99ccff;
-  border-radius: 10px;
-  padding: 15px;
-  width: 300px;
-}
+    // Evento click para aprobar/desaprobar
+    materias.forEach(materia => {
+        materia.addEventListener("click", () => {
+            if (materia.classList.contains("bloqueada")) return;
 
-.año h2 {
-  text-align: center;
-  color: #0066cc;
-}
+            materia.classList.toggle("aprobada");
+            const id = materia.dataset.id;
+            estado[id] = materia.classList.contains("aprobada") ? "aprobada" : "pendiente";
 
-button {
-  display: block;
-  width: 100%;
-  margin: 5px 0;
-  padding: 10px;
-  background: #b3d9ff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s;
-}
+            // Guardar estado
+            localStorage.setItem("estadoMaterias", JSON.stringify(estado));
 
-button:hover:not(.bloqueado):not(.aprobado) {
-  background: #80bfff;
-}
+            // Actualizar bloqueos
+            actualizarBloqueos();
+        });
 
-button.bloqueado {
-  background: #cccccc;
-  cursor: not-allowed;
-}
+        // Mostrar tooltip
+        materia.addEventListener("mouseenter", (e) => {
+            if (materia.classList.contains("bloqueada")) {
+                const req = materia.dataset.req;
+                const nombreReq = document.querySelector(`.materia[data-id="${req}"]`)?.innerText || "";
+                tooltip.innerText = `Debes aprobar: ${nombreReq}`;
+                tooltip.style.opacity = 1;
+                tooltip.style.left = e.pageX + 10 + "px";
+                tooltip.style.top = e.pageY + 10 + "px";
+            }
+        });
 
-button.aprobado {
-  background: #66cc66;
-  color: white;
-}
+        materia.addEventListener("mousemove", (e) => {
+            tooltip.style.left = e.pageX + 10 + "px";
+            tooltip.style.top = e.pageY + 10 + "px";
+        });
+
+        materia.addEventListener("mouseleave", () => {
+            tooltip.style.opacity = 0;
+        });
+    });
+
+    function actualizarBloqueos() {
+        materias.forEach(materia => {
+            const req = materia.dataset.req;
+            if (req) {
+                const aprobado = estado[req] === "aprobada";
+                materia.classList.toggle("bloqueada", !aprobado);
+            }
+        });
+    }
+
+    // Aplicar bloqueos iniciales
+    actualizarBloqueos();
+});
