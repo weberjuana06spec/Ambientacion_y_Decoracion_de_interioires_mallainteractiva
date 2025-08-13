@@ -4,51 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Malla Interactiva</title>
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Malla Interactiva</h1>
-
-    <div class="year">
+    <h1>Malla Curricular Interactiva</h1>
+    
+    <div class="anio">
         <h2>Primer Año</h2>
-        <ul>
-            <li class="materia" data-id="intro-diseno">Introducción al Diseño Ambiental</li>
-            <li class="materia" data-id="dibujo-comp">Dibujo y Composición</li>
-            <li class="materia" data-id="dibujo-tecnico">Dibujo Técnico</li>
-            <li class="materia" data-id="materiales">Materiales y Técnicas Básicas de la Construcción</li>
-            <li class="materia" data-id="sistemas-rep">Sistemas de Representación</li>
-            <li class="materia" data-id="teoria-color">Teoría y Práctica del Color</li>
-            <li class="materia" data-id="historia1">Historia del Arte I</li>
-            <li class="materia" data-id="sociologia1">Sociología I</li>
-            <li class="materia" data-id="estilos1">Estilos Arquitectónicos y del Mueble I</li>
-        </ul>
+        <div class="materias">
+            <div class="materia" data-id="1" data-req="">Introducción al Diseño Ambiental</div>
+            <div class="materia" data-id="2" data-req="">Dibujo y Composición</div>
+            <div class="materia" data-id="3" data-req="">Dibujo Técnico</div>
+            <div class="materia" data-id="4" data-req="">Materiales y Técnicas Básicas de la Construcción</div>
+            <div class="materia" data-id="5" data-req="">Sistemas de Representación</div>
+            <div class="materia" data-id="6" data-req="">Teoría y Práctica del Color</div>
+            <div class="materia" data-id="7" data-req="">Historia del Arte I</div>
+            <div class="materia" data-id="8" data-req="">Sociología I</div>
+            <div class="materia" data-id="9" data-req="">Estilos Arquitectónicos y del Mueble I</div>
+        </div>
     </div>
 
-    <div class="year">
+    <div class="anio">
         <h2>Segundo Año</h2>
-        <ul>
-            <li class="materia bloqueada" data-id="composicion" data-req="dibujo-comp">Composición</li>
-            <li class="materia bloqueada" data-id="elementos-deco1" data-req="intro-diseno">Elementos de Decoración I</li>
-            <li class="materia bloqueada" data-id="diseno-mueble" data-req="dibujo-tecnico">Diseño y Estructura del Mueble</li>
-            <li class="materia bloqueada" data-id="proyecto1" data-req="sistemas-rep">Proyecto I</li>
-            <li class="materia bloqueada" data-id="historia2" data-req="historia1">Historia del Arte II</li>
-            <li class="materia bloqueada" data-id="sociologia2" data-req="sociologia1">Sociología II</li>
-            <li class="materia bloqueada" data-id="estilos2" data-req="estilos1">Estilos Arquitectónicos y del Mueble II</li>
-            <li class="materia bloqueada" data-id="formacion-prof" data-req="materiales">Formación Profesional</li>
-            <li class="materia bloqueada" data-id="instalaciones" data-req="materiales">Instalaciones Eléctricas e Iluminación</li>
-        </ul>
+        <div class="materias">
+            <div class="materia" data-id="10" data-req="2,6">Composición</div>
+            <div class="materia" data-id="11" data-req="2,3,4,5,6">Elementos de Decoración I</div>
+            <div class="materia" data-id="12" data-req="2,3,5,6,9">Diseño y Estructura del Mueble</div>
+            <div class="materia" data-id="13" data-req="1,2,3,4,5,6,7,9">Proyecto I</div>
+            <div class="materia" data-id="14" data-req="7,8,9">Historia del Arte II</div>
+            <div class="materia" data-id="15" data-req="7,8">Sociología II</div>
+            <div class="materia" data-id="16" data-req="2,5,6,9">Estilos Arquitectónicos y del Mueble II</div>
+            <div class="materia" data-id="17" data-req="1,3,4">Formación Profesional</div>
+            <div class="materia" data-id="18" data-req="1,3,4,5">Instalaciones Eléctricas e Iluminación</div>
+        </div>
     </div>
 
-    <div class="year">
+    <div class="anio">
         <h2>Tercer Año</h2>
-        <ul>
-            <li class="materia bloqueada" data-id="elementos-deco2" data-req="elementos-deco1">Elementos de Decoración II</li>
-            <li class="materia bloqueada" data-id="instalaciones-esp" data-req="instalaciones">Introducción a las Instalaciones Especiales</li>
-            <li class="materia bloqueada" data-id="proyecto2" data-req="proyecto1">Proyecto II</li>
-        </ul>
+        <div class="materias">
+            <div class="materia" data-id="19" data-req="10,11,13">Elementos de Decoración II</div>
+            <div class="materia" data-id="20" data-req="13">Introducción a las Instalaciones Especiales</div>
+            <div class="materia" data-id="21" data-req="10,11,12,13,14,16,17,18">Proyecto II (Decoraciones Integrales)</div>
+            <div class="materia" data-id="22" data-req="14,15,16">Formación Nacional</div>
+            <div class="materia" data-id="23" data-req="15">Sociología Argentina</div>
+            <div class="materia" data-id="24" data-req="ALL">Práctica Profesional</div>
+        </div>
     </div>
 
-    <div id="tooltip"></div>
     <script src="script.js"></script>
 </body>
 </html>
